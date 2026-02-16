@@ -1,9 +1,11 @@
 ---
 title: "The Claude Code Configuration Mind Map: A Complete Mental Model"
-date: 2026-02-16
+date: 2026-02-14
 tags: [claude-code, ai-tools, developer-workflow]
 excerpt_text: "Claude Code has 6 configuration layers. Here's a mental model that maps every feature to the right question."
 ---
+
+> **Last verified:** February 14, 2026. Claude Code is actively evolving — some details may have changed since this was written.
 
 Claude Code is powerful but its configuration surface is sprawling — memory files, permissions, MCP servers, skills, hooks, output styles. When you need to configure something, it's hard to know *where* to reach.
 
