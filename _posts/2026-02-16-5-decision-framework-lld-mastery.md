@@ -1,4 +1,9 @@
-# The 5-Decision Framework: How to Master Low-Level System Design
+---
+title: "The 5-Decision Framework: How to Master Low-Level System Design"
+date: 2026-02-16
+tags: [system-design, engineering, first-principles]
+excerpt_text: "Elegant low-level design doesn't come from imagining the whole system. It comes from making 5 decisions well."
+---
 
 You've read the source code. You've studied the architecture docs. You've watched the system design videos. And yet, when you sit down to design something from scratch — the elegance doesn't come.
 
