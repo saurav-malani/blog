@@ -7,7 +7,62 @@ layout: default
     <div class="post-meta">{{ page.date | date: "%B %d, %Y" }}{% if page.tags.size > 0 %} &middot; {% for tag in page.tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}</div>
   </div>
 
-  {{ content }}
+  <nav class="toc" id="toc">
+    <div class="toc-title">Contents</div>
+  </nav>
+
+  <div id="post-content">
+    {{ content }}
+  </div>
 
   <a href="{{ site.baseurl }}/" class="back-link">&larr; All posts</a>
 </article>
+
+<script>
+(function() {
+  var content = document.getElementById('post-content');
+  var toc = document.getElementById('toc');
+  var headings = content.querySelectorAll('h2, h3');
+
+  if (headings.length < 2) {
+    toc.style.display = 'none';
+    return;
+  }
+
+  var ul = document.createElement('ul');
+  var currentH2Li = null;
+  var currentH3Ul = null;
+
+  headings.forEach(function(h) {
+    // Ensure heading has an id
+    if (!h.id) {
+      h.id = h.textContent.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+    }
+
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+
+    if (h.tagName === 'H2') {
+      li.appendChild(a);
+      ul.appendChild(li);
+      currentH2Li = li;
+      currentH3Ul = null;
+    } else if (h.tagName === 'H3' && currentH2Li) {
+      if (!currentH3Ul) {
+        currentH3Ul = document.createElement('ul');
+        currentH2Li.appendChild(currentH3Ul);
+      }
+      li.appendChild(a);
+      currentH3Ul.appendChild(li);
+    }
+  });
+
+  toc.appendChild(ul);
+})();
+</script>
