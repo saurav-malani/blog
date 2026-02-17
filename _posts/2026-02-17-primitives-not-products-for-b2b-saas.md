@@ -1,5 +1,5 @@
 ---
-title: "Primitives, Not Products — Applied to B2B SaaS"
+title: "Revenue Tooling Is Having Its Salesforce Moment"
 date: 2026-02-17
 tags: [strategy, platforms, b2b-saas, primitives, revenue-tooling]
 excerpt_text: "Salesforce, Slack, Shopify, Figma, K8s, Claude Code — the most durable platforms all followed the same playbook. What happens when you apply it to B2B SaaS companies serving revenue teams?"
