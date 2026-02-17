@@ -7,73 +7,11 @@ layout: default
     <div class="post-meta">{{ page.date | date: "%B %d, %Y" }}{% if page.tags.size > 0 %} &middot; {% for tag in page.tags %}{{ tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}</div>
   </div>
 
-  <nav class="toc" id="toc">
-    <div class="toc-title">Contents</div>
-  </nav>
+  {{ content }}
 
-  <div id="post-content">
-    {{ content }}
+  <div class="post-footer">
+    <p>Have thoughts on this? <a href="mailto:{{ site.author_email }}?subject=Re: {{ page.title | uri_escape }}">Reply via email</a></p>
   </div>
 
   <a href="{{ site.baseurl }}/" class="back-link">&larr; All posts</a>
 </article>
-
-<script>
-(function() {
-  var content = document.getElementById('post-content');
-  var toc = document.getElementById('toc');
-  var headings = content.querySelectorAll('h2, h3');
-
-  if (headings.length < 2) {
-    toc.style.display = 'none';
-    return;
-  }
-
-  var ul = document.createElement('ul');
-  var currentH2Li = null;
-  var currentH3Ul = null;
-
-  var usedIds = {};
-  headings.forEach(function(h) {
-    // Ensure heading has an id
-    if (!h.id) {
-      var id = h.textContent.toLowerCase()
-        .replace(/[\u2014\u2013\u2018\u2019\u201C\u201D]/g, '') // em/en dashes, smart quotes
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/^\s+|\s+$/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-');
-      if (!id) id = 'section';
-      // Deduplicate
-      if (usedIds[id]) {
-        usedIds[id]++;
-        id = id + '-' + usedIds[id];
-      } else {
-        usedIds[id] = 1;
-      }
-      h.id = id;
-    }
-
-    var li = document.createElement('li');
-    var a = document.createElement('a');
-    a.href = '#' + h.id;
-    a.textContent = h.textContent;
-
-    if (h.tagName === 'H2') {
-      li.appendChild(a);
-      ul.appendChild(li);
-      currentH2Li = li;
-      currentH3Ul = null;
-    } else if (h.tagName === 'H3' && currentH2Li) {
-      if (!currentH3Ul) {
-        currentH3Ul = document.createElement('ul');
-        currentH2Li.appendChild(currentH3Ul);
-      }
-      li.appendChild(a);
-      currentH3Ul.appendChild(li);
-    }
-  });
-
-  toc.appendChild(ul);
-})();
-</script>

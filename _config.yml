@@ -6,9 +6,7 @@ remote_theme: pages-themes/hacker@v0.2.0
 plugins:
   - jekyll-remote-theme
 permalink: /:slug/
-markdown: kramdown
-kramdown:
-  auto_ids: true
+author_email: sauravmalani1@gmail.com
 defaults:
   - scope:
       path: ""
