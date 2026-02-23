@@ -1,270 +1,84 @@
 ---
-title: "Language Is Linear. Reality Is Not. So Why Does Code Work?"
+title: "Why AI Goes in Circles — It Gets What You Say, Not What You Mean"
 date: 2026-02-23
 tags: [ai, interface-design, constraints, language, systems-thinking]
 excerpt_text: "The problem with LLM instability isn't intelligence — it's interface design. Natural language collapses multidimensional intent into linear text. The fix isn't better prompts, but a meta-layer that preserves constraint graphs."
 ---
 
-There's a strange frustration that shows up when working with large language models.
+You're building something with an LLM. You've gone back and forth a few times. It's mostly right, but the formatting is off. You say: *fix the formatting.* It does. But now the tone has shifted. You say: *match the earlier tone.* It does. But the structure you agreed on three messages ago is gone.
 
-You fix one issue.
+You're not imagining it. This actually happens. And once you notice the pattern, you see it everywhere — in code generation, in writing, in system design. Each fix quietly undoes something else.
 
-It introduces another.
+The instinct is to blame the model. But the model isn't being careless.
 
-You fix the new issue.
+Something else is going on.
 
-It quietly reintroduces the old one.
+Each time you give a new instruction, the model treats it as the primary objective. It optimizes for the latest thing you said. Unless you restate every prior constraint, some get quietly dropped. You're not iterating. You're overwriting.
 
-It feels unstable. Almost careless.
+This is sequential local optimization in a multidimensional constraint space. You're adjusting one axis at a time, but the problem lives in many axes simultaneously. Without a way to hold all constraints in place, each adjustment destabilizes the last.
 
-But the problem isn't intelligence.
+But this doesn't happen with simple tasks. Ask an LLM to write a function, fix a typo, summarize a paragraph — it works fine. The circles start when the problem has multiple requirements in tension. Readability versus performance. Security versus usability. Brevity versus completeness. The more constraints that need to coexist, the more likely each new instruction collapses an old one.
 
-The problem is structure.
+So what's actually causing this?
 
-## The Oscillation Problem
+## The Lossy Compression of Intent
 
-Suppose you ask an LLM:
+Here's the uncomfortable truth: language is linear. We speak, write, and read one word after another, one sentence after another. But the problems we're trying to describe are not linear at all.
 
-*Make this code more readable.*
+A system design problem doesn't live in a sentence. It lives across functional requirements, performance constraints, security boundaries, maintainability tradeoffs, environmental assumptions, and business priorities — all simultaneously, all in tension with each other. That's not a list. That's a constraint graph.
 
-*Now optimize performance.*
+And every time you write a prompt, you're compressing that graph into a flat string of text. Some things survive the compression. Others don't.
 
-*Now reduce complexity.*
+What gets lost? The implicit stuff. The things you know but didn't say because they felt obvious:
 
-*Now ensure edge cases are handled.*
+- Which requirements are hard constraints and which are soft preferences.
+- What the priority order is when two goals conflict.
+- What must never regress, no matter what else changes.
+- Which earlier decisions are load-bearing and which are flexible.
+- What "good" looks like when you can't have everything.
 
-Each time it adjusts the solution.
+You hold all of this in your head simultaneously. But the prompt captures only the explicit slice — the thing you said, not the full structure behind it. The model receives a compressed, impoverished version of what you actually mean.
 
-And each time, something previously fixed regresses.
+That's not a prompting mistake. That's a structural property of the medium. Language is a lossy compression format for multidimensional intent.
 
-This isn't randomness.
+## But Code Is Language Too — So Why Does It Work?
 
-It's sequential local optimization in a multidimensional constraint space.
+There's an obvious objection here: if language is the problem, how does code work? Code models the world. Code is written in language. And code doesn't oscillate the way prompts do.
 
-You're tweaking one axis at a time.
+It's a sharp question. And the answer reveals exactly where the real gap is.
 
-But the system lives in many axes simultaneously.
+Code is language — but it comes bundled with enforcement. Type systems, interfaces, explicit hierarchies, compiler checks, runtime validation, test suites. When a constraint is violated in code, something breaks visibly. There's feedback. There's enforcement. The structure isn't just described — it's *enforced*.
 
-## The Deeper Realization
+English has none of that. When you say *"make it scalable but readable and secure,"* you haven't defined what scalability means in this context, which quality dominates in a conflict, or what must never regress. You're relying on shared understanding that doesn't exist between you and the model.
 
-Here's the uncomfortable truth:
+Code works not because it's language, but because it's language plus structure plus enforcement. It makes constraints explicit and machine-checkable. English leaves them implicit and hopes for the best.
 
-**Language is linear.**
+And that's exactly what gets lost in prompts. Not the words — the structure behind the words. The invariants you assumed were obvious. The priority ordering you never stated. The conflict resolution rules that exist in your head but never made it into text.
 
-We speak in sequences.
-We write in sequences.
-We read in sequences.
+## The Model Isn't the Bottleneck
 
-But the world we model is not sequential.
+Here's what makes this especially interesting: LLMs are not linear internally. They operate in high-dimensional vector spaces. Attention mechanisms process relationships across the entire context in parallel. The model's internal representation is already rich, structured, and multidimensional.
 
-It's hierarchical.
-It's relational.
-It's constrained.
-It's multidimensional.
+The model *can* hold constraint graphs. It can reason about tradeoffs. It can maintain multiple objectives simultaneously — if it receives them in a form that preserves their structure.
 
-A system design problem doesn't live in a sentence.
+But it doesn't receive them that way. It receives a flat string of text that has already lost most of the structure.
 
-It lives in:
+The bottleneck isn't inside the model. It's upstream — between your thinking and the model's input. We're using a low-fidelity interface to communicate with a high-dimensional reasoning system. The model is more capable than the pipe we're feeding it through.
 
-- Functional requirements
-- Performance constraints
-- Security constraints
-- Maintainability tradeoffs
-- Environmental assumptions
-- Business priorities
+## A Compiler for Intent
 
-That's not a list.
+Once you see the problem this way, the shape of the solution becomes clear.
 
-That's a constraint graph.
+We don't need better prompts. We need an intermediate layer that preserves structure — something that sits between raw human thought and the model's input, and does what a compiler does for code: transforms a high-level representation into a form the target system can actually work with.
 
-## The Objection: But Code Is Language Too
+Instead of *Intent → English → LLM*, something closer to *Intent → Constraint Graph → Structured Specification → LLM*.
 
-A friend once said:
+That layer would do what you currently do in your head (and often fail to fully transfer): extract the dimensions of the problem, declare invariants that must hold across iterations, assign priority ordering when goals conflict, make tradeoff rules explicit, and enforce regression checks so that fixing one thing can't silently break another.
 
-> "If language is linear and that's the problem, then how does code work? Code models the world just fine. And code is written in language."
+A compiler for intent. Not replacing natural language — structuring it. Catching implicit constraints the way a type checker catches implicit type assumptions. Making the unsaid things said, in a form the model can actually hold stable.
 
-That's a powerful objection.
+This isn't science fiction. Pieces of it already exist — system prompts, structured output schemas, context management tools, CLAUDE.md files that persist instructions across sessions. But they're scattered and manual. The insight is that they're all solving the same underlying problem: preserving constraint structure that natural language drops.
 
-And it forces a refinement.
+The next interface for AI won't just be a text box. It will be a layer that helps you express what you actually mean — all of it, including the parts you'd normally leave unsaid — without flattening it into a string that loses the structure the model needs to stay coherent across iterations.
 
-The issue is not linearity.
-
-The issue is formal structure.
-
-## Code Is Not Just Language
-
-Code is language plus:
-
-- Type systems
-- Namespacing
-- Explicit hierarchies
-- Interfaces
-- Invariants
-- Compiler enforcement
-- Runtime validation
-- Test suites
-
-When a constraint is violated, something breaks visibly.
-
-There is feedback.
-
-There is enforcement.
-
-English has none of that.
-
-When we say:
-
-*"Make it scalable but readable and secure."*
-
-We have not defined:
-
-- What scalability means.
-- What readability means.
-- Which one dominates in a conflict.
-- Which are hard constraints.
-- Which are soft constraints.
-- What must never regress.
-
-We assume shared understanding.
-
-The model does not have that shared structure unless we explicitly encode it.
-
-## The Real Problem: Implicit Constraints
-
-When working with LLMs, we often do incremental corrections:
-
-Fix A.
-
-Now fix B.
-
-Now fix C.
-
-But each instruction becomes the most recent dominant objective.
-
-Unless all invariants are restated, some get dropped.
-
-The model isn't maintaining a formal constraint system.
-
-It's reconstructing intent from text each time.
-
-The oscillation happens because invariants are implicit instead of declared.
-
-## Why Visual Thinking Feels Better
-
-When we draw system diagrams:
-
-- Hierarchies are visible.
-- Dependencies are visible.
-- Cross-cutting concerns are visible.
-- Groupings are visible.
-
-A graph is spatially parallel.
-
-Everything exists at once.
-
-Language unfolds in time.
-
-Visual systems reduce cognitive load because they externalize the constraint graph.
-
-But even diagrams are not magic.
-
-They still encode structure symbolically.
-
-They just make it explicit.
-
-## The Real Interface Gap
-
-Here's what's actually happening:
-
-**In your head:**
-A multidimensional constraint graph.
-
-**In your prompt:**
-A linear compression of that graph.
-
-Loss happens in serialization.
-
-The problem is not intelligence.
-It is interface fidelity.
-
-## The Missing Layer
-
-What we actually need is a meta-layer.
-
-Instead of:
-
-*Intent → Raw English → LLM*
-
-We need:
-
-*Intent → Constraint Graph → Structured Serialization → LLM*
-
-That intermediate layer would:
-
-- Extract dimensions.
-- Declare invariants.
-- Assign priorities.
-- Identify conflicts.
-- Encode tradeoff rules.
-- Enforce regression checks.
-
-Essentially, a compiler for intent.
-
-Not replacing English.
-
-Structuring it.
-
-## Why This Matters
-
-LLMs themselves are not linear internally.
-
-They operate in high-dimensional vector spaces.
-
-The bottleneck is not inside the model.
-
-It is between human thought and symbolic input.
-
-We are using a low-fidelity interface for high-dimensional reasoning.
-
-## The Bigger Insight
-
-This is not about "prompt engineering."
-
-This is about interface design for intelligence.
-
-Natural language is flexible and expressive.
-
-But it is underconstrained.
-
-Code works because it formalizes structure.
-
-Visual diagrams help because they reveal structure.
-
-The future interface for AI may combine:
-
-- Natural language for flexibility
-- Structured schemas for precision
-- Constraint graphs for stability
-- Automated regression checks for consistency
-
-Not smarter models.
-
-Better serialization of intent.
-
-## Closing Thought
-
-The frustration of fixing one thing and breaking another is not a model failure.
-
-It is a representation failure.
-
-When structure is implicit, it collapses.
-
-When structure is explicit, it stabilizes.
-
-The next evolution in working with AI won't just be larger models.
-
-It will be better ways of expressing multidimensional thought without flattening it.
-
-And that's not a prompt problem.
-
-It's a language design problem.
+That's not a prompt engineering problem. That's an interface design problem. And it might be the most important one in AI right now.
